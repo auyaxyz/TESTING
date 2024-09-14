@@ -267,7 +267,7 @@ MinimizeButton.TextWrapped = true
 
 -- Scripts:
 
-local function ECTQ_fake_script() -- Frame.LocalScript 
+local function LGAV_fake_script() -- Frame.LocalScript 
 	local script = Instance.new('LocalScript', Frame)
 
 	-- Referensi ke objek frame
@@ -304,8 +304,8 @@ local function ECTQ_fake_script() -- Frame.LocalScript
 	frame.InputChanged:Connect(onInputChanged)
 	
 end
-coroutine.wrap(ECTQ_fake_script)()
-local function QVDX_fake_script() -- ScreenGui.LocalScript 
+coroutine.wrap(LGAV_fake_script)()
+local function ARFWJU_fake_script() -- ScreenGui.LocalScript 
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local TweenService = game:GetService("TweenService")
@@ -337,6 +337,7 @@ local function QVDX_fake_script() -- ScreenGui.LocalScript
 	local isTeleporting = false
 	local auraCoroutine
 	local pad1Connection, pad2Connection, pad3Connection -- Simpan setiap sambungan
+	local raidIslandMeshPart = game:GetService("Workspace").Map.RaidMap.RaidIsland1.Model.MeshPart -- Objek target
 	
 	_G.Kill_Aura = false
 	
@@ -356,7 +357,7 @@ local function QVDX_fake_script() -- ScreenGui.LocalScript
 		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 	
 		if targetCFrame then
-			local targetPosition = targetCFrame.Position + Vector3.new(0, 0, 0)
+			local targetPosition = targetCFrame.Position + Vector3.new(0, -1, 0)
 			local distance = (humanoidRootPart.Position - targetPosition).magnitude
 	
 			setNoclip(character, true)
@@ -374,6 +375,24 @@ local function QVDX_fake_script() -- ScreenGui.LocalScript
 			setNoclip(character, false)
 		else
 			warn("Target CFrame tidak ditemukan")
+		end
+	end
+	
+	-- Fungsi untuk menghentikan tween jika karakter berada di MeshPart
+	local function checkPlayerAtMeshPart(connection)
+		if connection then
+			local player = game.Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+			local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	
+			local distanceToMeshPart = (humanoidRootPart.Position - raidIslandMeshPart.Position).Magnitude
+			if distanceToMeshPart < 5 then -- Jika pemain berada dekat dengan MeshPart (misalnya dalam radius 5 studs)
+				if connection then
+					connection:Disconnect() -- Hentikan teleportasi
+				end
+				setNoclip(character, false) -- Kembali ke status normal
+				print("Teleportasi dihentikan karena pemain mencapai RaidIsland1 MeshPart")
+			end
 		end
 	end
 	
@@ -396,6 +415,9 @@ local function QVDX_fake_script() -- ScreenGui.LocalScript
 	
 				humanoidRootPart.CFrame = targetCFrame
 				setNoclip(character, true)
+	
+				-- Cek jika karakter sudah sampai di MeshPart dan hentikan teleportasi
+				checkPlayerAtMeshPart(connection)
 			end)
 		else
 			-- Hentikan pergerakan dan putuskan sambungan
@@ -497,4 +519,4 @@ local function QVDX_fake_script() -- ScreenGui.LocalScript
 	MinimizeButton.MouseButton1Click:Connect(toggleMinimize)
 	
 end
-coroutine.wrap(QVDX_fake_script)()
+coroutine.wrap(ARFWJU_fake_script)()
