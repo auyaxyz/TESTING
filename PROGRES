@@ -267,7 +267,7 @@ MinimizeButton.TextWrapped = true
 
 -- Scripts:
 
-local function WKCAIS_fake_script() -- Frame.LocalScript 
+local function ECTQ_fake_script() -- Frame.LocalScript 
 	local script = Instance.new('LocalScript', Frame)
 
 	-- Referensi ke objek frame
@@ -304,8 +304,8 @@ local function WKCAIS_fake_script() -- Frame.LocalScript
 	frame.InputChanged:Connect(onInputChanged)
 	
 end
-coroutine.wrap(WKCAIS_fake_script)()
-local function BHIU_fake_script() -- ScreenGui.LocalScript 
+coroutine.wrap(ECTQ_fake_script)()
+local function QVDX_fake_script() -- ScreenGui.LocalScript 
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local TweenService = game:GetService("TweenService")
@@ -356,7 +356,7 @@ local function BHIU_fake_script() -- ScreenGui.LocalScript
 		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 	
 		if targetCFrame then
-			local targetPosition = targetCFrame.Position + Vector3.new(0, 3, 0)
+			local targetPosition = targetCFrame.Position + Vector3.new(0, 0, 0)
 			local distance = (humanoidRootPart.Position - targetPosition).magnitude
 	
 			setNoclip(character, true)
@@ -442,7 +442,7 @@ local function BHIU_fake_script() -- ScreenGui.LocalScript
 						local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
 	
 						if humanoid and humanoidRootPart and humanoid.Health > 0 then
-							if (humanoidRootPart.Position - playerPosition).Magnitude <= 150 then
+							if (humanoidRootPart.Position - playerPosition).Magnitude <= 200 then
 								pcall(function()
 									humanoid.Health = 0
 									humanoidRootPart.CanCollide = false
@@ -497,4 +497,4 @@ local function BHIU_fake_script() -- ScreenGui.LocalScript
 	MinimizeButton.MouseButton1Click:Connect(toggleMinimize)
 	
 end
-coroutine.wrap(BHIU_fake_script)()
+coroutine.wrap(QVDX_fake_script)()
