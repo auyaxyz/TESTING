@@ -132,7 +132,7 @@ local function toggleAURA()
                     local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
 
                     if humanoid and humanoidRootPart and humanoid.Health > 0 then
-                        if (humanoidRootPart.Position - playerPosition).Magnitude <= 50 then
+                        if (humanoidRootPart.Position - playerPosition).Magnitude <= 150 then
                             pcall(function()
                                 humanoid.Health = 0
                                 humanoidRootPart.CanCollide = false
