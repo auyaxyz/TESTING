@@ -1,493 +1,187 @@
--- Gui to Lua
--- Version: 3.2
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local PAD1 = script.Parent.Frame.PAD1
+local Button1 = PAD1.Button
+local Circle1 = PAD1.Circle
 
--- Instances:
+local PAD2 = script.Parent.Frame.PAD2
+local Button2 = PAD2.Button
+local Circle2 = PAD2.Circle
 
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local PAD1 = Instance.new("TextLabel")
-local PAD1_2 = Instance.new("ImageLabel")
-local UICorner = Instance.new("UICorner")
-local Circle = Instance.new("Frame")
-local UICorner_2 = Instance.new("UICorner")
-local Button = Instance.new("TextButton")
-local PAD2 = Instance.new("ImageLabel")
-local UICorner_3 = Instance.new("UICorner")
-local Circle_2 = Instance.new("Frame")
-local UICorner_4 = Instance.new("UICorner")
-local Button_2 = Instance.new("TextButton")
-local PAD3 = Instance.new("ImageLabel")
-local UICorner_5 = Instance.new("UICorner")
-local Circle_3 = Instance.new("Frame")
-local UICorner_6 = Instance.new("UICorner")
-local Button_3 = Instance.new("TextButton")
-local PAD2_2 = Instance.new("TextLabel")
-local PAD3_2 = Instance.new("TextLabel")
-local AURA = Instance.new("ImageLabel")
-local UICorner_7 = Instance.new("UICorner")
-local Circle_4 = Instance.new("Frame")
-local UICorner_8 = Instance.new("UICorner")
-local Button_4 = Instance.new("TextButton")
-local AURA_2 = Instance.new("TextLabel")
-local MinimizeButton = Instance.new("TextButton")
+local PAD3 = script.Parent.Frame.PAD3
+local Button3 = PAD3.Button
+local Circle3 = PAD3.Circle
 
---Properties:
+local AURA = script.Parent.Frame.AURA
+local Button4 = AURA.Button
+local Circle4 = AURA.Circle
 
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local MinimizeButton = script.Parent.MinimizeButton
+local Frame = script.Parent.Frame
 
-Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(75, 75, 75)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.265091091, 0, 0.476095617, 0)
-Frame.Size = UDim2.new(0, 126, 0, 103)
+local isPAD1On = false
+local isPAD2On = false
+local isPAD3On = false
+local isAURAOn = false
+local isMinimized = false
+local isTeleporting = false
+local auraCoroutine
+local pad1Connection, pad2Connection, pad3Connection -- Simpan setiap sambungan
 
-PAD1.Name = "PAD 1"
-PAD1.Parent = Frame
-PAD1.BackgroundColor3 = Color3.fromRGB(243, 243, 243)
-PAD1.BackgroundTransparency = 1.000
-PAD1.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD1.BorderSizePixel = 0
-PAD1.Position = UDim2.new(0.0871741921, 0, 0.0679611638, 0)
-PAD1.Size = UDim2.new(0, 77, 0, 22)
-PAD1.Font = Enum.Font.FredokaOne
-PAD1.Text = "PAD 1"
-PAD1.TextColor3 = Color3.fromRGB(255, 255, 255)
-PAD1.TextScaled = true
-PAD1.TextSize = 14.000
-PAD1.TextWrapped = true
+_G.Kill_Aura = false
 
-PAD1_2.Name = "PAD1"
-PAD1_2.Parent = Frame
-PAD1_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-PAD1_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD1_2.BorderSizePixel = 0
-PAD1_2.Position = UDim2.new(0.694359899, 0, 0.0970873758, 0)
-PAD1_2.Size = UDim2.new(0, 26, 0, 18)
-PAD1_2.Image = "rbxassetid://16382316568"
-PAD1_2.ImageColor3 = Color3.fromRGB(33, 255, 89)
-
-UICorner.CornerRadius = UDim.new(1, 0)
-UICorner.Parent = PAD1_2
-
-Circle.Name = "Circle"
-Circle.Parent = PAD1_2
-Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Circle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Circle.BorderSizePixel = 0
-Circle.Position = UDim2.new(0.611435175, 0, 0.00065612793, 0)
-Circle.Size = UDim2.new(0, 19, 0, 18)
-
-UICorner_2.CornerRadius = UDim.new(1, 0)
-UICorner_2.Parent = Circle
-
-Button.Name = "Button"
-Button.Parent = PAD1_2
-Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Button.BackgroundTransparency = 1.000
-Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Button.BorderSizePixel = 0
-Button.Position = UDim2.new(-0.0239357874, 0, 0.00065612793, 0)
-Button.Size = UDim2.new(0, 61, 0, 18)
-Button.Font = Enum.Font.SourceSans
-Button.Text = ""
-Button.TextColor3 = Color3.fromRGB(0, 0, 0)
-Button.TextSize = 14.000
-
-PAD2.Name = "PAD2"
-PAD2.Parent = Frame
-PAD2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-PAD2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD2.BorderSizePixel = 0
-PAD2.Position = UDim2.new(0.694359899, 0, 0.311263591, 0)
-PAD2.Size = UDim2.new(0, 26, 0, 18)
-PAD2.Image = "rbxassetid://16382316568"
-PAD2.ImageColor3 = Color3.fromRGB(33, 255, 89)
-
-UICorner_3.CornerRadius = UDim.new(1, 0)
-UICorner_3.Parent = PAD2
-
-Circle_2.Name = "Circle"
-Circle_2.Parent = PAD2
-Circle_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Circle_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Circle_2.BorderSizePixel = 0
-Circle_2.Position = UDim2.new(0.611435175, 0, 0.00119527185, 0)
-Circle_2.Size = UDim2.new(0, 19, 0, 18)
-
-UICorner_4.CornerRadius = UDim.new(1, 0)
-UICorner_4.Parent = Circle_2
-
-Button_2.Name = "Button"
-Button_2.Parent = PAD2
-Button_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Button_2.BackgroundTransparency = 1.000
-Button_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Button_2.BorderSizePixel = 0
-Button_2.Position = UDim2.new(-0.0239357874, 0, 0.00119866268, 0)
-Button_2.Size = UDim2.new(0, 61, 0, 17)
-Button_2.Font = Enum.Font.SourceSans
-Button_2.Text = ""
-Button_2.TextColor3 = Color3.fromRGB(0, 0, 0)
-Button_2.TextSize = 14.000
-
-PAD3.Name = "PAD3"
-PAD3.Parent = Frame
-PAD3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-PAD3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD3.BorderSizePixel = 0
-PAD3.Position = UDim2.new(0.694359899, 0, 0.534566045, 0)
-PAD3.Size = UDim2.new(0, 26, 0, 18)
-PAD3.Image = "rbxassetid://16382316568"
-PAD3.ImageColor3 = Color3.fromRGB(33, 255, 89)
-
-UICorner_5.CornerRadius = UDim.new(1, 0)
-UICorner_5.Parent = PAD3
-
-Circle_3.Name = "Circle"
-Circle_3.Parent = PAD3
-Circle_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Circle_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Circle_3.BorderSizePixel = 0
-Circle_3.Position = UDim2.new(0.611435175, 0, -0.0156538226, 0)
-Circle_3.Size = UDim2.new(0, 19, 0, 18)
-
-UICorner_6.CornerRadius = UDim.new(1, 0)
-UICorner_6.Parent = Circle_3
-
-Button_3.Name = "Button"
-Button_3.Parent = PAD3
-Button_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Button_3.BackgroundTransparency = 1.000
-Button_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Button_3.BorderSizePixel = 0
-Button_3.Position = UDim2.new(-0.0239357874, 0, -0.0156538226, 0)
-Button_3.Size = UDim2.new(0, 61, 0, 18)
-Button_3.Font = Enum.Font.SourceSans
-Button_3.Text = ""
-Button_3.TextColor3 = Color3.fromRGB(0, 0, 0)
-Button_3.TextSize = 14.000
-
-PAD2_2.Name = "PAD 2"
-PAD2_2.Parent = Frame
-PAD2_2.BackgroundColor3 = Color3.fromRGB(243, 243, 243)
-PAD2_2.BackgroundTransparency = 1.000
-PAD2_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD2_2.BorderSizePixel = 0
-PAD2_2.Position = UDim2.new(0.0871741921, 0, 0.275866449, 0)
-PAD2_2.Size = UDim2.new(0, 77, 0, 22)
-PAD2_2.Font = Enum.Font.FredokaOne
-PAD2_2.Text = "PAD 2"
-PAD2_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-PAD2_2.TextScaled = true
-PAD2_2.TextSize = 14.000
-PAD2_2.TextWrapped = true
-
-PAD3_2.Name = "PAD 3"
-PAD3_2.Parent = Frame
-PAD3_2.BackgroundColor3 = Color3.fromRGB(243, 243, 243)
-PAD3_2.BackgroundTransparency = 1.000
-PAD3_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PAD3_2.BorderSizePixel = 0
-PAD3_2.Position = UDim2.new(0.0871741921, 0, 0.499764442, 0)
-PAD3_2.Size = UDim2.new(0, 77, 0, 22)
-PAD3_2.Font = Enum.Font.FredokaOne
-PAD3_2.Text = "PAD 3"
-PAD3_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-PAD3_2.TextScaled = true
-PAD3_2.TextSize = 14.000
-PAD3_2.TextWrapped = true
-
-AURA.Name = "AURA"
-AURA.Parent = Frame
-AURA.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-AURA.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AURA.BorderSizePixel = 0
-AURA.Position = UDim2.new(0.694359899, 0, 0.748158276, 0)
-AURA.Size = UDim2.new(0, 26, 0, 18)
-AURA.Image = "rbxassetid://16382316568"
-AURA.ImageColor3 = Color3.fromRGB(33, 255, 89)
-
-UICorner_7.CornerRadius = UDim.new(1, 0)
-UICorner_7.Parent = AURA
-
-Circle_4.Name = "Circle"
-Circle_4.Parent = AURA
-Circle_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Circle_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Circle_4.BorderSizePixel = 0
-Circle_4.Position = UDim2.new(0.611435175, 0, -0.0156538226, 0)
-Circle_4.Size = UDim2.new(0, 19, 0, 18)
-
-UICorner_8.CornerRadius = UDim.new(1, 0)
-UICorner_8.Parent = Circle_4
-
-Button_4.Name = "Button"
-Button_4.Parent = AURA
-Button_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Button_4.BackgroundTransparency = 1.000
-Button_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Button_4.BorderSizePixel = 0
-Button_4.Position = UDim2.new(-0.0239357874, 0, -0.0156538226, 0)
-Button_4.Size = UDim2.new(0, 61, 0, 18)
-Button_4.Font = Enum.Font.SourceSans
-Button_4.Text = ""
-Button_4.TextColor3 = Color3.fromRGB(0, 0, 0)
-Button_4.TextSize = 14.000
-
-AURA_2.Name = "AURA"
-AURA_2.Parent = Frame
-AURA_2.BackgroundColor3 = Color3.fromRGB(243, 243, 243)
-AURA_2.BackgroundTransparency = 1.000
-AURA_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AURA_2.BorderSizePixel = 0
-AURA_2.Position = UDim2.new(0.0871741921, 0, 0.713356674, 0)
-AURA_2.Size = UDim2.new(0, 77, 0, 22)
-AURA_2.Font = Enum.Font.FredokaOne
-AURA_2.Text = "AURA"
-AURA_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-AURA_2.TextScaled = true
-AURA_2.TextSize = 14.000
-AURA_2.TextWrapped = true
-
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Parent = ScreenGui
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
-MinimizeButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-MinimizeButton.BorderSizePixel = 0
-MinimizeButton.Position = UDim2.new(0.020139426, 0, 0.268077582, 0)
-MinimizeButton.Size = UDim2.new(0, 35, 0, 29)
-MinimizeButton.Font = Enum.Font.SourceSans
-MinimizeButton.Text = "-"
-MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinimizeButton.TextScaled = true
-MinimizeButton.TextSize = 31.000
-MinimizeButton.TextWrapped = true
-
--- Scripts:
-
-local function IUEHW_fake_script() -- Frame.LocalScript 
-	local script = Instance.new('LocalScript', Frame)
-
-	-- Referensi ke objek frame
-	local frame = script.Parent
-	local dragging = false
-	local dragInput
-	local dragStart
-	local startPos
-	
-	-- Fungsi untuk memulai drag
-	local function onInputBegan(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			dragging = true
-			dragStart = input.Position
-			startPos = frame.Position
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-				end
-			end)
-		end
-	end
-	
-	-- Fungsi untuk mengupdate posisi frame selama drag
-	local function onInputChanged(input)
-		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-			local delta = input.Position - dragStart
-			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-	end
-	
-	-- Menyambungkan event input ke fungsi
-	frame.InputBegan:Connect(onInputBegan)
-	frame.InputChanged:Connect(onInputChanged)
-	
+-- Fungsi untuk mengatur noclip
+local function setNoclip(character, noclip)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not noclip
+        end
+    end
 end
-coroutine.wrap(IUEHW_fake_script)()
-local function KQRSSA_fake_script() -- ScreenGui.LocalScript 
-	local script = Instance.new('LocalScript', ScreenGui)
 
-	local TweenService = game:GetService("TweenService")
-	local RunService = game:GetService("RunService")
-	local PAD1 = script.Parent.Frame.PAD1
-	local Button1 = PAD1.Button
-	local Circle1 = PAD1.Circle
-	
-	local PAD2 = script.Parent.Frame.PAD2
-	local Button2 = PAD2.Button
-	local Circle2 = PAD2.Circle
-	
-	local PAD3 = script.Parent.Frame.PAD3
-	local Button3 = PAD3.Button
-	local Circle3 = PAD3.Circle
-	
-	local AURA = script.Parent.Frame.AURA
-	local Button4 = AURA.Button
-	local Circle4 = AURA.Circle
-	
-	local MinimizeButton = script.Parent.MinimizeButton
-	local Frame = script.Parent.Frame
-	
-	local isPAD1On = false
-	local isPAD2On = false
-	local isPAD3On = false
-	local isAURAOn = false
-	local isMinimized = false
-	local isTeleporting = false
-	local auraCoroutine
-	local pad1Connection, pad2Connection, pad3Connection
-	
-	_G.Kill_Aura = false
-	
-	-- Fungsi untuk mengatur noclip
-	local function setNoclip(character, noclip)
-		for _, part in ipairs(character:GetDescendants()) do
-			if part:IsA("BasePart") then
-				part.CanCollide = not noclip
-			end
-		end
-	end
-	
-	-- Fungsi teleportasi dengan tween
-	local function teleport(targetCFrame)
-		local player = game.Players.LocalPlayer
-		local character = player.Character or player.CharacterAdded:Wait()
-		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-	
-		if targetCFrame then
-			local targetPosition = targetCFrame.Position + Vector3.new(0, 3, 0)
-			local distance = (humanoidRootPart.Position - targetPosition).magnitude
-	
-			setNoclip(character, true)
-	
-			local tweenSpeed = (distance < 250) and 600 or (distance > 1000) and 200 or distance / 5
-			local tweenDuration = distance / tweenSpeed
-	
-			local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-			local tween = TweenService:Create(humanoidRootPart, tweenInfo, { CFrame = targetCFrame })
-	
-			tween:Play()
-			tween.Completed:Wait()
-	
-			humanoidRootPart.CFrame = targetCFrame -- Set to target after tween completes
-			setNoclip(character, false)
-		else
-			warn("Target CFrame tidak ditemukan")
-		end
-	end
-	
-	-- Fungsi teleportasi terus-menerus setelah tween selesai
-	local function continuousTeleport(targetCFrame, isPADOn, connection)
-		if isPADOn then
-			-- Pastikan teleportasi pertama kali menggunakan tween
-			teleport(targetCFrame)
-	
-			-- Menggunakan RunService.Heartbeat untuk terus mengatur posisi ke target setelah tween selesai
-			connection = RunService.Heartbeat:Connect(function()
-				local player = game.Players.LocalPlayer
-				local character = player.Character or player.CharacterAdded:Wait()
-				local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-	
-				humanoidRootPart.CFrame = targetCFrame
-				setNoclip(character, true)
-			end)
-		else
-			-- Hentikan pergerakan dan putuskan sambungan
-			if connection then
-				connection:Disconnect()
-				setNoclip(game.Players.LocalPlayer.Character, false)
-			end
-		end
-	end
-	
-	-- Fungsi toggle generik untuk PAD
-	local function togglePAD(PAD, Circle, isPADOn, targetCFrame, connection)
-		isPADOn = not isPADOn
-		if isPADOn then
-			Circle.Position = UDim2.new(0.629, 0, 0, 0)
-			PAD.ImageColor3 = Color3.fromRGB(53, 255, 110)
-			continuousTeleport(targetCFrame, isPADOn, connection) -- Mulai teleportasi terus-menerus setelah tween
-		else
-			Circle.Position = UDim2.new(0, 0, 0, 0)
-			PAD.ImageColor3 = Color3.fromRGB(200, 200, 200)
-			continuousTeleport(nil, isPADOn, connection) -- Hentikan teleportasi
-		end
-		return isPADOn
-	end
-	
-	-- Fungsi untuk toggle AURA
-	local function toggleAURA()
-		isAURAOn = not isAURAOn
-		_G.Kill_Aura = isAURAOn
-	
-		if isAURAOn then
-			Circle4.Position = UDim2.new(0.629, 0, 0, 0)
-			AURA.ImageColor3 = Color3.fromRGB(53, 255, 110)
-	
-			-- Jalankan Kill Aura
-			auraCoroutine = coroutine.wrap(function()
-				while _G.Kill_Aura do
-					wait(0.5)
-					local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-					for _, enemy in pairs(game.Workspace.Enemies:GetChildren()) do
-						local humanoid = enemy:FindFirstChild("Humanoid")
-						local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
-	
-						if humanoid and humanoidRootPart and humanoid.Health > 0 then
-							if (humanoidRootPart.Position - playerPosition).Magnitude <= 150 then
-								pcall(function()
-									humanoid.Health = 0
-									humanoidRootPart.CanCollide = false
-								end)
-							end
-						end
-					end
-				end
-			end)
-			auraCoroutine()
-		else
-			Circle4.Position = UDim2.new(0, 0, 0, 0)
-			AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		end
-	end
-	
-	-- Fungsi untuk toggle minimize frame
-	local function toggleMinimize()
-		isMinimized = not isMinimized
-		Frame.Visible = not isMinimized
-	end
-	
-	-- Set tampilan awal
-	local function setInitialState()
-		Circle1.Position = UDim2.new(0, 0, 0, 0)
-		PAD1.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle2.Position = UDim2.new(0, 0, 0, 0)
-		PAD2.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle3.Position = UDim2.new(0, 0, 0, 0)
-		PAD3.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle4.Position = UDim2.new(0, 0, 0, 0)
-		AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
-	end
-	
-	-- Set tampilan awal
-	setInitialState()
-	
-	-- Event listener untuk setiap tombol PAD
-	Button1.MouseButton1Click:Connect(function()
-		isPAD1On = togglePAD(PAD1, Circle1, isPAD1On, CFrame.new(-5018.04932, 318.081726, -2912.26807), pad1Connection)
-	end)
-	
-	Button2.MouseButton1Click:Connect(function()
-		isPAD2On = togglePAD(PAD2, Circle2, isPAD2On, CFrame.new(-5003.35547, 318.081726, -2875.87671), pad2Connection)
-	end)
-	
-	Button3.MouseButton1Click:Connect(function()
-		isPAD3On = togglePAD(PAD3, Circle3, isPAD3On, CFrame.new(-4988.50342, 318.081726, -2839.09277), pad3Connection)
-	end)
-	
-	Button4.MouseButton1Click:Connect(toggleAURA)
-	MinimizeButton.MouseButton1Click:Connect(toggleMinimize)
-	
+-- Fungsi teleportasi dengan tween
+local function teleport(targetCFrame)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    if targetCFrame then
+        local targetPosition = targetCFrame.Position + Vector3.new(0, 3, 0)
+        local distance = (humanoidRootPart.Position - targetPosition).magnitude
+
+        setNoclip(character, true)
+
+        local tweenSpeed = (distance < 250) and 600 or (distance > 1000) and 200 or distance / 5
+        local tweenDuration = distance / tweenSpeed
+
+        local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, { CFrame = targetCFrame })
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        humanoidRootPart.CFrame = targetCFrame -- Set to target after tween completes
+        setNoclip(character, false)
+    else
+        warn("Target CFrame tidak ditemukan")
+    end
 end
-coroutine.wrap(KQRSSA_fake_script)()
+
+-- Fungsi teleportasi terus-menerus setelah tween selesai
+local function continuousTeleport(targetCFrame, isPADOn, connection)
+    -- Hentikan koneksi lama jika ada
+    if connection then
+        connection:Disconnect()
+    end
+
+    if isPADOn then
+        -- Pastikan teleportasi pertama kali menggunakan tween
+        teleport(targetCFrame)
+
+        -- Menggunakan RunService.Heartbeat untuk terus mengatur posisi ke target setelah tween selesai
+        connection = RunService.Heartbeat:Connect(function()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+            humanoidRootPart.CFrame = targetCFrame
+            setNoclip(character, true)
+        end)
+    else
+        -- Hentikan pergerakan dan putuskan sambungan
+        if connection then
+            connection:Disconnect() -- Hentikan koneksi
+        end
+        setNoclip(game.Players.LocalPlayer.Character, false)
+    end
+
+    return connection -- Kembalikan sambungan untuk digunakan kembali
+end
+
+-- Fungsi toggle generik untuk PAD
+local function togglePAD(PAD, Circle, isPADOn, targetCFrame, connection)
+    isPADOn = not isPADOn
+    if isPADOn then
+        Circle.Position = UDim2.new(0.629, 0, 0, 0)
+        PAD.ImageColor3 = Color3.fromRGB(53, 255, 110)
+        connection = continuousTeleport(targetCFrame, isPADOn, connection) -- Mulai teleportasi terus-menerus setelah tween
+    else
+        Circle.Position = UDim2.new(0, 0, 0, 0)
+        PAD.ImageColor3 = Color3.fromRGB(200, 200, 200)
+        connection = continuousTeleport(nil, isPADOn, connection) -- Hentikan teleportasi
+    end
+    return isPADOn, connection
+end
+
+-- Fungsi untuk toggle AURA
+local function toggleAURA()
+    isAURAOn = not isAURAOn
+    _G.Kill_Aura = isAURAOn
+
+    if isAURAOn then
+        Circle4.Position = UDim2.new(0.629, 0, 0, 0)
+        AURA.ImageColor3 = Color3.fromRGB(53, 255, 110)
+
+        -- Jalankan Kill Aura
+        auraCoroutine = coroutine.wrap(function()
+            while _G.Kill_Aura do
+                wait(0.5)
+                local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                for _, enemy in pairs(game.Workspace.Enemies:GetChildren()) do
+                    local humanoid = enemy:FindFirstChild("Humanoid")
+                    local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+
+                    if humanoid and humanoidRootPart and humanoid.Health > 0 then
+                        if (humanoidRootPart.Position - playerPosition).Magnitude <= 50 then
+                            pcall(function()
+                                humanoid.Health = 0
+                                humanoidRootPart.CanCollide = false
+                            end)
+                        end
+                    end
+                end
+            end
+        end)
+        auraCoroutine()
+    else
+        Circle4.Position = UDim2.new(0, 0, 0, 0)
+        AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
+    end
+end
+
+-- Fungsi untuk toggle minimize frame
+local function toggleMinimize()
+    isMinimized = not isMinimized
+    Frame.Visible = not isMinimized
+end
+
+-- Set tampilan awal
+local function setInitialState()
+    Circle1.Position = UDim2.new(0, 0, 0, 0)
+    PAD1.ImageColor3 = Color3.fromRGB(200, 200, 200)
+    Circle2.Position = UDim2.new(0, 0, 0, 0)
+    PAD2.ImageColor3 = Color3.fromRGB(200, 200, 200)
+    Circle3.Position = UDim2.new(0, 0, 0, 0)
+    PAD3.ImageColor3 = Color3.fromRGB(200, 200, 200)
+    Circle4.Position = UDim2.new(0, 0, 0, 0)
+    AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
+end
+
+-- Set tampilan awal
+setInitialState()
+
+-- Event listener untuk setiap tombol PAD
+Button1.MouseButton1Click:Connect(function()
+    isPAD1On, pad1Connection = togglePAD(PAD1, Circle1, isPAD1On, CFrame.new(-5018.04932, 318.081726, -2912.26807), pad1Connection)
+end)
+
+Button2.MouseButton1Click:Connect(function()
+    isPAD2On, pad2Connection = togglePAD(PAD2, Circle2, isPAD2On, CFrame.new(-5003.35547, 318.081726, -2875.87671), pad2Connection)
+end)
+
+Button3.MouseButton1Click:Connect(function()
+    isPAD3On, pad3Connection = togglePAD(PAD3, Circle3, isPAD3On, CFrame.new(-4988.50342, 318.081726, -2839.09277), pad3Connection)
+end)
+
+Button4.MouseButton1Click:Connect(toggleAURA)
+MinimizeButton.MouseButton1Click:Connect(toggleMinimize)
