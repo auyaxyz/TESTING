@@ -267,7 +267,7 @@ MinimizeButton.TextWrapped = true
 
 -- Scripts:
 
-local function GRJHU_fake_script() -- Frame.LocalScript 
+local function IUEHW_fake_script() -- Frame.LocalScript 
 	local script = Instance.new('LocalScript', Frame)
 
 	-- Referensi ke objek frame
@@ -304,8 +304,8 @@ local function GRJHU_fake_script() -- Frame.LocalScript
 	frame.InputChanged:Connect(onInputChanged)
 	
 end
-coroutine.wrap(GRJHU_fake_script)()
-local function YCDCD_fake_script() -- ScreenGui.LocalScript 
+coroutine.wrap(IUEHW_fake_script)()
+local function KQRSSA_fake_script() -- ScreenGui.LocalScript 
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local TweenService = game:GetService("TweenService")
@@ -340,18 +340,6 @@ local function YCDCD_fake_script() -- ScreenGui.LocalScript
 	
 	_G.Kill_Aura = false
 	
-	-- Mengatur tampilan awal ke OFF
-	local function setInitialState()
-		Circle1.Position = UDim2.new(0, 0, 0, 0)
-		PAD1.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle2.Position = UDim2.new(0, 0, 0, 0)
-		PAD2.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle3.Position = UDim2.new(0, 0, 0, 0)
-		PAD3.ImageColor3 = Color3.fromRGB(200, 200, 200)
-		Circle4.Position = UDim2.new(0, 0, 0, 0)
-		AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
-	end
-	
 	-- Fungsi untuk mengatur noclip
 	local function setNoclip(character, noclip)
 		for _, part in ipairs(character:GetDescendants()) do
@@ -361,10 +349,41 @@ local function YCDCD_fake_script() -- ScreenGui.LocalScript
 		end
 	end
 	
-	-- Fungsi untuk teleportasi secara terus menerus ke target
+	-- Fungsi teleportasi dengan tween
+	local function teleport(targetCFrame)
+		local player = game.Players.LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	
+		if targetCFrame then
+			local targetPosition = targetCFrame.Position + Vector3.new(0, 3, 0)
+			local distance = (humanoidRootPart.Position - targetPosition).magnitude
+	
+			setNoclip(character, true)
+	
+			local tweenSpeed = (distance < 250) and 600 or (distance > 1000) and 200 or distance / 5
+			local tweenDuration = distance / tweenSpeed
+	
+			local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+			local tween = TweenService:Create(humanoidRootPart, tweenInfo, { CFrame = targetCFrame })
+	
+			tween:Play()
+			tween.Completed:Wait()
+	
+			humanoidRootPart.CFrame = targetCFrame -- Set to target after tween completes
+			setNoclip(character, false)
+		else
+			warn("Target CFrame tidak ditemukan")
+		end
+	end
+	
+	-- Fungsi teleportasi terus-menerus setelah tween selesai
 	local function continuousTeleport(targetCFrame, isPADOn, connection)
 		if isPADOn then
-			-- Menggunakan RunService.Heartbeat untuk terus mengatur posisi ke target
+			-- Pastikan teleportasi pertama kali menggunakan tween
+			teleport(targetCFrame)
+	
+			-- Menggunakan RunService.Heartbeat untuk terus mengatur posisi ke target setelah tween selesai
 			connection = RunService.Heartbeat:Connect(function()
 				local player = game.Players.LocalPlayer
 				local character = player.Character or player.CharacterAdded:Wait()
@@ -388,7 +407,7 @@ local function YCDCD_fake_script() -- ScreenGui.LocalScript
 		if isPADOn then
 			Circle.Position = UDim2.new(0.629, 0, 0, 0)
 			PAD.ImageColor3 = Color3.fromRGB(53, 255, 110)
-			continuousTeleport(targetCFrame, isPADOn, connection) -- Mulai teleportasi terus-menerus
+			continuousTeleport(targetCFrame, isPADOn, connection) -- Mulai teleportasi terus-menerus setelah tween
 		else
 			Circle.Position = UDim2.new(0, 0, 0, 0)
 			PAD.ImageColor3 = Color3.fromRGB(200, 200, 200)
@@ -440,6 +459,18 @@ local function YCDCD_fake_script() -- ScreenGui.LocalScript
 	end
 	
 	-- Set tampilan awal
+	local function setInitialState()
+		Circle1.Position = UDim2.new(0, 0, 0, 0)
+		PAD1.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		Circle2.Position = UDim2.new(0, 0, 0, 0)
+		PAD2.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		Circle3.Position = UDim2.new(0, 0, 0, 0)
+		PAD3.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		Circle4.Position = UDim2.new(0, 0, 0, 0)
+		AURA.ImageColor3 = Color3.fromRGB(200, 200, 200)
+	end
+	
+	-- Set tampilan awal
 	setInitialState()
 	
 	-- Event listener untuk setiap tombol PAD
@@ -459,4 +490,4 @@ local function YCDCD_fake_script() -- ScreenGui.LocalScript
 	MinimizeButton.MouseButton1Click:Connect(toggleMinimize)
 	
 end
-coroutine.wrap(YCDCD_fake_script)()
+coroutine.wrap(KQRSSA_fake_script)()
